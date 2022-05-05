@@ -22,8 +22,8 @@ public class OsProcess {
     public int getProcessId() {
         return ProcessId;
     }
-    public String display(){
-        return "ProcessId: "+ProcessId+" FileName: "+FileName;
+    public void display(){
+        System.out.println( "ProcessId: "+ProcessId+", FileName: "+FileName);
     }
 
     public void addToProcessMemory(String key, Object value){
