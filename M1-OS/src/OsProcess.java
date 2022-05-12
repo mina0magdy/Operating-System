@@ -70,8 +70,8 @@ public class OsProcess {
         //read file and put each line in a queue
         Queue<String> instructionQueue = new LinkedList<>();
         try {
-            URL path = ClassLoader.getSystemResource(this.FileName);
-            File f = new File(path.toURI());
+            //URL path = ClassLoader.getSystemResource("\\M1-OS\\"+this.FileName);
+            File f = new File("C:\\Users\\20122\\eclipse-workspace\\M1-OS\\"+this.FileName);
             BufferedReader br
                     = new BufferedReader(new FileReader(f));
             String st;
@@ -82,8 +82,6 @@ public class OsProcess {
             br.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
