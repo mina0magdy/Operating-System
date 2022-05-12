@@ -23,7 +23,6 @@ public class Interpreter {
     public void interpret(OsProcess currentProcess,String instruction,int timeSlice) throws URISyntaxException, IOException {
         System.out.println("current process: " + currentProcess.display());
         System.out.println("current instruction: " + instruction);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 
         systemCall systemCall = new systemCall(currentProcess);
@@ -38,6 +37,8 @@ public class Interpreter {
             case "semWait" -> semWait(currentProcess, tokens[1],generalBlockedQueue);
             case "semSignal" -> semSignal(currentProcess, tokens[1],readyQueue,generalBlockedQueue);
         }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
         //
         if(currentProcess.getInstructionsQueue().isEmpty()){
             currentProcess.setState(processState.TERMINATED);
