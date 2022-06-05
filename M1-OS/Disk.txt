@@ -1,0 +1,20 @@
+ProcessID 3
+ProcessState BLOCKED
+PC 9
+StartInMemory 0
+EndInMemory 20
+Variable1 null
+Variable2 null
+Variable3 null
+Instruction0 semWait userInput
+Instruction1 assign a input
+Instruction2 semSignal userInput
+Instruction3 semWait file
+Instruction4 assign b readFile a
+Instruction5 semSignal file
+Instruction6 semWait userOutput
+Instruction7 print b
+Instruction8 semSignal userOutput
+Instruction9 null
+Instruction10 null
+Instruction11 null

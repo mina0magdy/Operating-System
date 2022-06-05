@@ -9,13 +9,16 @@ public class OS {
 
     private int timeSlice;
     ArrayList<OsProcess> processes;
+    Memory memory;
 
 
     public OS(int timeSlice,ArrayList<OsProcess> processes) throws URISyntaxException, IOException {
         this.timeSlice = timeSlice;
         this.processes = processes;
+        this.memory = new Memory();
 
-        scheduler scheduler = new scheduler(timeSlice,this.processes);
+
+        scheduler scheduler = new scheduler(timeSlice,this.processes,memory);
 
     }
 
@@ -34,6 +37,10 @@ public class OS {
         processes.add(process3);
 
         OS os = new OS(2, processes);
+
+        //System.out.println(processState.READY+" mina");
+
+
 
 
 

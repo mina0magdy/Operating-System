@@ -19,14 +19,21 @@ public class systemCall {
         return sc.nextLine();
     }
 
-    public void print(String s) {
-        if(currentProcess.checkIfExists(s))
-            System.out.println(currentProcess.getFromProcessMemory(s));
-        else
-            System.out.println(s);
+    public void print(String s,OsProcess currentProcess,int currentProcessMemoryIndex,Memory memory) {
+//        if(currentProcess.checkIfExists(s))
+//            System.out.println(currentProcess.getFromProcessMemory(s));
+//        else
+//            System.out.println(s);
+
+    for(int i=0;i<3;i++){
+        if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(s)){
+            System.out.println(((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]);
+            break;
+        }
+        }
     }
 
-    public   void assign(String[] value) {
+    public   void assign(String[] value,OsProcess currentProcess,int currentProcessMemoryIndex,Memory memory) {
         String s=value[2];
         if(value.length>3) {
             s="";
@@ -34,39 +41,65 @@ public class systemCall {
                 s += value[i] + " ";
             }
         }
-        if(currentProcess.checkIfExists(s))
-            currentProcess.addToProcessMemory(value[1], currentProcess.getFromProcessMemory(s));
-        else
-            currentProcess.addToProcessMemory(value[1], s);
+//        if(currentProcess.checkIfExists(s))
+//            currentProcess.addToProcessMemory(value[1], currentProcess.getFromProcessMemory(s));
+//        else
+//            currentProcess.addToProcessMemory(value[1], s);
+
+        boolean variableFound=false;
+        for(int i=0;i<3;i++){
+            if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(value[1])){
+                //System.out.println(((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]);
+                memory.setInMemory(currentProcessMemoryIndex + 5 + i,value[1]+":"+s);
+                variableFound=true;
+                break;
+            }
+        }
+        if(!variableFound){
+            for(int i=0;i<3;i++){
+                if(memory.getFromMemory(currentProcessMemoryIndex + 5 + i) == null){
+                    memory.setInMemory(currentProcessMemoryIndex + 5 + i,value[1]+":"+s);
+                    break;
+                }
+            }
+        }
     }
     //what if the file is not there?
-    public   void writeFile(String fileName, String content) throws URISyntaxException, IOException {
+    public   void writeFile(String fileName, String content,OsProcess currentProcess,int currentProcessMemoryIndex,Memory memory) throws URISyntaxException, IOException {
         //create new file in the file system
         //write content to the file
-        fileName= (String) currentProcess.getFromProcessMemory(fileName);
-        content= (String) currentProcess.getFromProcessMemory(content);
+//        fileName= (String) currentProcess.getFromProcessMemory(fileName);
+//        content= (String) currentProcess.getFromProcessMemory(content);
+        for(int i=0;i<3;i++){
+            if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(fileName)){
+                fileName=(((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]);
+                break;
+            }
+        }
+
+        for(int i=0;i<3;i++){
+            if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(content)){
+                content=(((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]);
+                break;
+            }
+        }
         FileWriter file = new FileWriter(fileName + ".txt");
         file.write(content + "");
         file.close();
     }
 
-    public String readFile(String fileName) throws URISyntaxException, IOException {
-        fileName= (String) currentProcess.getFromProcessMemory(fileName);
+    public String readFile(String fileName,OsProcess currentProcess,int currentProcessMemoryIndex,Memory memory) throws URISyntaxException, IOException {
+        //fileName= (String) currentProcess.getFromProcessMemory(fileName);
         //read file and return the content
-        /*
-        String result = "";
-        URL path = ClassLoader.getSystemResource(fileName);
-        File f = new File(path.toURI());
-        BufferedReader br = new BufferedReader(new FileReader(f));
-        String st;
-        while (( st=br.readLine()) != null) {
-            result += st+"\n";
+
+        for(int i=0;i<3;i++){
+            if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(fileName)){
+                fileName=(((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]);
+                break;
+            }
         }
-        return result;
 
-
-         */
-
+//
         FileReader fr = new FileReader(fileName+".txt");
         BufferedReader br = new BufferedReader(fr);
         String s;
@@ -79,10 +112,24 @@ public class systemCall {
         return result;
     }
 
-    public   void printFromTo(String From, String To) {
-        //print values from 'From' to 'To'
-        int from=Integer.parseInt(""+ currentProcess.getFromProcessMemory(From));
-        int to=Integer.parseInt((""+ currentProcess.getFromProcessMemory(To)));
+    public   void printFromTo(String From, String To,OsProcess currentProcess,int currentProcessMemoryIndex,Memory memory) {
+//        //print values from 'From' to 'To'
+        int from=-1;
+        int to=-1;
+
+        for(int i=0;i<3;i++){
+            if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(From)){
+                  from=Integer.parseInt((((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]).replace(" ",""));
+                break;
+            }
+        }
+
+        for(int i=0;i<3;i++){
+            if((memory.getFromMemory(currentProcessMemoryIndex + 5 + i) != null) &&((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[0].equals(To)){
+                 to=Integer.parseInt((((String) memory.getFromMemory(currentProcessMemoryIndex + 5 + i)).split(":")[1]).replace(" ",""));
+                break;
+            }
+        }
         for(int i=from;i<=to;i++)
             System.out.println(i);
     }
